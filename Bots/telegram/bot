@@ -10,8 +10,8 @@
 [[ ! -d /etc/SSHPlus ]] && exit 0
 [[ ! -d /etc/bot ]] && exit 0
 source ShellBot.sh
-api_bot=$1
-id_admin=$2
+api_bot="$1"
+id_admin="$2"
 [[ -z $api_bot ]] && exit 0
 [[ -z $id_admin ]] && exit 0
 ativos='/etc/bot/lista_ativos'
