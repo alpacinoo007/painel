@@ -1,14 +1,20 @@
 #!/bin/bash
 
 clear
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Este script requer permissões de root."
+    exit 1
+fi
+
 arch=$(uname -p)
 if [ "$arch" != "x86_64" ]; then
   echo "Arquitetura não suportada por enquanto: $arch"
   exit 1
 fi
 
+pkill alpha-painel &>/dev/null
 if sudo netstat -tuln | grep -w ":8081" &>/dev/null; then
-    echo "A porta 8081 está em uso, não sera possivel gerar o certificado."
+    echo "A porta 8081 está em uso, não sera possivel iniciar o servidor."
     exit 0
 fi
 
@@ -26,7 +32,7 @@ else
 fi
 
 clear
-echo "Agora crie um login para entrar no servidor"
+echo "Crie um login para entrar no servidor"
 echo
 read -p "Digite o login: " login
 if [ ${#login} -lt 4 ]; then
@@ -52,12 +58,13 @@ if [ ${#senha} -gt 20 ]; then
     exit 1
 fi
 
+echo
 if python3 -c "import bcrypt" &>/dev/null; then
     login_hash=$(python3 -c "import bcrypt; print(bcrypt.hashpw('$login'.encode('utf-8'), bcrypt.gensalt(rounds=12)).decode('utf-8'))")
     senha_hash=$(python3 -c "import bcrypt; print(bcrypt.hashpw('$senha'.encode('utf-8'), bcrypt.gensalt(rounds=12)).decode('utf-8'))")
-    echo "O login será salvo usando BCrypt"
+    echo "O login será salvo usando BCrypt por questões de segurança:"
 else
-    echo "bcrypt não está disponível. A senha será armazenada em texto simples."
+    echo "bcrypt não está disponível. A senha será armazenada em texto simples:"
     login_hash="$login"
     senha_hash="$senha"
 fi
@@ -65,11 +72,43 @@ fi
 rm -f '/etc/login-painel.txt'
 echo "login=$login_hash" >/etc/login-painel.txt
 echo "senha=$senha_hash" >>/etc/login-painel.txt
-
+echo
 cat /etc/login-painel.txt
 echo
 
 sleep 5
+
+versao_ubuntu=$(lsb_release -r -s);
+echo
+echo "Escolha a versão do servidor mais proxima da sua versão"
+echo "Sua versão: ${versao_ubuntu}"
+echo
+echo "1 - Servidor Ubuntu 22+"
+echo "2 - Servidor Ubuntu 18+"
+read -p "Digite o número da opção desejada: " escolha
+
+if [ "$escolha" == "1" ]; then
+    versao="u22-$(uname -p)"
+elif [ "$escolha" == "2" ]; then
+    versao="u18-$(uname -p)"
+else
+    echo "Opção inválida."
+    exit 1
+fi
+
+url="https://github.com/alpacinoo007/painel/releases/download/v0.0.1/alpha-painel-$versao"
+diretorio_destino="/usr/bin/alpha-painel"
+rm -f $diretorio_destino
+
+wget -O "$diretorio_destino" "$url"
+if [ $? -eq 0 ]; then
+    chmod +x "$diretorio_destino"
+    echo "Servidor Alpha-Painel baixado e instalado em $diretorio_destino."
+else
+    echo "Erro ao baixar o servidor Alpha-Painel."
+    exit 1
+fi
+
 
 protocolo="--protocolo=https"
 if [ "$protocolo" == "--protocolo=https" ] && [ ! -f "/etc/painel-certificado.p12" ]; then
@@ -87,11 +126,12 @@ echo "Iniciando servidor, aguarde...";
 echo
 echo
 echo
-sleep 10
+sleep 15
 if (netstat -tlpn | grep -w 8081 >/dev/null && pgrep -x 'alpha-painel' >/dev/null); then
-    echo "O servidor está online."
+    echo "O servidor foi iniciado com sucesso!"
 else
     echo "Ocorreu um erro ao tentar iniciar o servidor"
     sudo sed -i '/alpha-painel/d' /etc/autostart
     rm -f /usr/bin/alpha-painel
+    pkill alpha-painel
 fi
