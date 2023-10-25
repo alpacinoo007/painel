@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Este script requer permissões de root."
+    exit 1
+fi
+
+
 if sudo netstat -tuln | grep -w ":80" &>/dev/null; then
     echo "A porta 80 está em uso, não sera possivel gerar o certificado."
     exit 0;
