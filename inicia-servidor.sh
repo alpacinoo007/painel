@@ -7,6 +7,13 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 arch=$(uname -p)
+if [ "$arch" == "unknown" ]; then
+    dpkg_arch=$(dpkg --print-architecture)
+    if [ "$dpkg_arch" == "amd64" ]; then
+        arch="x86_64"
+    fi
+fi
+
 if [ "$arch" != "x86_64" ]; then
   echo "Arquitetura não suportada por enquanto: $arch"
   exit 1
@@ -80,7 +87,9 @@ sleep 5
 
 versao_ubuntu=$(lsb_release -r -s);
 echo
+os_info=$(grep -o 'ID=\w*' /etc/os-release | cut -d'=' -f2)
 echo "Escolha a versão do servidor mais proxima da sua versão"
+echo "Seu OS: $os_info"
 echo "Sua versão: ${versao_ubuntu}"
 echo
 echo "1 - Servidor Ubuntu 22+"
