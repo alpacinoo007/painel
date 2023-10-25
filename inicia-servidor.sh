@@ -87,19 +87,20 @@ sleep 5
 
 versao_ubuntu=$(lsb_release -r -s);
 echo
-os_info=$(grep -o 'ID=\w*' /etc/os-release | cut -d'=' -f2)
+os_info=$(grep -o 'ID=\w*' /etc/os-release | cut -d'=' -f2 | tr -d '[:space:]')
 echo "Escolha a versão do servidor mais proxima da sua versão"
 echo "Seu OS: $os_info"
 echo "Sua versão: ${versao_ubuntu}"
 echo
 echo "1 - Servidor Ubuntu 22+"
 echo "2 - Servidor Ubuntu 18+"
+echo
 read -p "Digite o número da opção desejada: " escolha
 
 if [ "$escolha" == "1" ]; then
-    versao="u22-$(uname -p)"
+    versao="u22-$arch"
 elif [ "$escolha" == "2" ]; then
-    versao="u18-$(uname -p)"
+    versao="u18-$arch"
 else
     echo "Opção inválida."
     exit 1
