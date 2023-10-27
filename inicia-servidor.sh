@@ -120,11 +120,15 @@ else
 fi
 
 
-protocolo="--protocolo=https"
-if [ "$protocolo" == "--protocolo=https" ] && [ ! -f "/etc/painel-certificado.p12" ]; then
-  echo "O certificado não foi gerado, e ainda não tem suporte a HTTP";
-  exit 1
+protocolo=""
+if [ -e "/etc/painel-certificado.p12" ]; then
+  protocolo="--protocolo=https"
+  echo "O servidor será iniciado usando HTTPS."
+else
+  echo "O servidor será iniciado usando HTTP."
 fi
+
+sleep 5
 
 sudo sed -i '/alpha-painel/d' /etc/autostart
 echo "(netstat -tlpn | grep -w 8081 > /dev/null && pgrep -x 'alpha-painel' > /dev/null) || /usr/bin/alpha-painel $protocolo &" | sudo tee -a /etc/autostart
@@ -133,11 +137,11 @@ bash /etc/autostart
 
 echo
 echo "Iniciando servidor, aguarde...";
-echo
-echo
-echo
 sleep 15
 if (netstat -tlpn | grep -w 8081 >/dev/null && pgrep -x 'alpha-painel' >/dev/null); then
+    echo
+    echo
+    echo
     echo "O servidor foi iniciado com sucesso!"
 else
     echo "Ocorreu um erro ao tentar iniciar o servidor"

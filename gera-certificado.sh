@@ -8,7 +8,7 @@ fi
 
 if sudo netstat -tuln | grep -w ":80" &>/dev/null; then
     echo "A porta 80 está em uso, não sera possivel gerar o certificado."
-    exit 0;
+    exit 1;
 fi
 
 if command -v firewall-cmd &>/dev/null; then
@@ -71,6 +71,9 @@ if [ $? -eq 0 ]; then
     echo "$senha_aleatoria" | sudo tee /etc/cert-pass.txt > /dev/null
     sudo rm -f /etc/painel-certificado.p12
     openssl pkcs12 -export -in /etc/letsencrypt/live/"$dominio"/fullchain.pem -inkey /etc/letsencrypt/live/"$dominio"/privkey.pem -out /etc/painel-certificado.p12 -CAfile /etc/letsencrypt/live/"$dominio"/chain.pem -caname root -name "painelweb" -passout pass:"$senha_aleatoria"
+    echo
+    echo
+    echo
     if [ $? -eq 0 ]; then
         echo "Certificado P12 criado com sucesso!"
     else
