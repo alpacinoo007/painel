@@ -6,7 +6,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 
-if sudo netstat -tuln | awk '$4 ~ /:80$/' &>/dev/null; then
+if sudo netstat -tlpn | grep -w 80 &>/dev/null; then
     echo "A porta 80 está em uso, não será possível gerar o certificado."
     exit 1
 fi
