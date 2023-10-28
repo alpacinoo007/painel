@@ -19,7 +19,11 @@ if [ "$arch" != "x86_64" ]; then
   exit 1
 fi
 
-pkill alpha-painel &>/dev/null
+
+sudo sed -i '/alpha-painel/d' /etc/autostart
+pkill alpha-painel
+killall alpha-painel
+
 if sudo netstat -tuln | grep -w ":8081" &>/dev/null; then
     echo "A porta 8081 está em uso, não sera possivel iniciar o servidor."
     exit 0
@@ -69,7 +73,10 @@ echo
 if python3 -c "import bcrypt" &>/dev/null; then
     login_hash=$(python3 -c "import bcrypt; print(bcrypt.hashpw('$login'.encode('utf-8'), bcrypt.gensalt(rounds=12)).decode('utf-8'))")
     senha_hash=$(python3 -c "import bcrypt; print(bcrypt.hashpw('$senha'.encode('utf-8'), bcrypt.gensalt(rounds=12)).decode('utf-8'))")
-    echo "O login será salvo usando BCrypt por questões de segurança:"
+    echo "O login será salvo usando BCrypt por questões de segurança"
+    echo
+    echo "Lembrando que para autenticar deve ser usada a senha digitada, bcrypt é apenas parar proteger ela"
+    sleep 3
 else
     echo "bcrypt não está disponível. A senha será armazenada em texto simples:"
     login_hash="$login"
