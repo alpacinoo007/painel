@@ -84,7 +84,7 @@ dpkg-reconfigure --frontend noninteractive tzdata >/dev/null 2>&1
 rm -f /bin/uexpired
 wget -O /bin/uexpired https://raw.githubusercontent.com/alpacinoo007/painel/main/Outros/uexpired
 chmod 777 /bin/uexpired
-bash /bin/uexpired
+bash /bin/uexpired &
 
 #Configuração para BOT SSH
 [[ ! -d /etc/SSHPlus ]] && mkdir /etc/SSHPlus

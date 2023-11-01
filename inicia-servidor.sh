@@ -128,7 +128,6 @@ rm -f $diretorio_destino
 wget -O "$diretorio_destino" "$url"
 if [ $? -eq 0 ]; then
     chmod +x "$diretorio_destino"
-    echo "Servidor Alpha-Painel baixado e instalado em $diretorio_destino."
 else
     echo "Erro ao baixar o servidor Alpha-Painel."
     exit 1
