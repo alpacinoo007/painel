@@ -17,6 +17,7 @@ clear
 
 sed -i 's/Port 22222/Port 22/g' /etc/ssh/sshd_config >/dev/null 2>&1
 service ssh restart >/dev/null 2>&1
+export DEBIAN_FRONTEND=noninteractive
 _pacotes=(
     "wget"
     "firewalld"
@@ -44,7 +45,7 @@ _pacotes=(
     "openssl"
     "speedtest-cli")
 for _prog in ${_pacotes[@]}; do
-    apt install $_prog -y
+    apt-get install $_prog -y
 done
 
 clear
@@ -53,6 +54,7 @@ wget https://github.com/alpacinoo007/ws-proxies/raw/main/Outros/libssl1.1_1.1.1.
 sudo dpkg -i libssl1.1_1.1.1.deb >/dev/null 2>&1
 rm -f libssl1.1_1.1.1.deb >/dev/null 2>&1
 
+pip install --upgrade pip
 pip install speedtest-cli
 pip install bcrypt
 

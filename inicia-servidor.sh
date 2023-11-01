@@ -21,6 +21,13 @@ fi
 
 
 sudo sed -i '/alpha-painel/d' /etc/autostart
+
+pid=$(pgrep alpha-painel)
+if [ -n "$pid" ]; then
+  kill "$pid"
+  echo "O processo alpha-painel com PID $pid foi encerrado."
+fi
+
 pkill alpha-painel
 killall alpha-painel
 
@@ -44,6 +51,7 @@ fi
 
 clear
 echo "Crie um login para entrar no servidor"
+sleep 3
 echo
 read -p "Digite o login: " login
 if [ ${#login} -lt 4 ]; then
@@ -75,7 +83,7 @@ if python3 -c "import bcrypt" &>/dev/null; then
     senha_hash=$(python3 -c "import bcrypt; print(bcrypt.hashpw('$senha'.encode('utf-8'), bcrypt.gensalt(rounds=12)).decode('utf-8'))")
     echo "O login será salvo usando BCrypt por questões de segurança"
     echo
-    echo "Lembrando que para autenticar deve ser usada a senha digitada, bcrypt é apenas parar proteger ela"
+    echo "Lembrando que para autenticar deve ser usada o login digitada, bcrypt é apenas para proteger ela"
     sleep 3
 else
     echo "bcrypt não está disponível. A senha será armazenada em texto simples:"
@@ -99,8 +107,8 @@ echo "Escolha a versão do servidor mais proxima da sua versão"
 echo "Seu OS: $os_info"
 echo "Sua versão: ${versao_ubuntu}"
 echo
-echo "1 - Servidor Ubuntu 22+"
-echo "2 - Servidor Ubuntu 18+"
+echo "1 - Servidor Ubuntu 22"
+echo "2 - Servidor Ubuntu 18 - 20 e Debian 11"
 echo
 read -p "Digite o número da opção desejada: " escolha
 
