@@ -15,17 +15,16 @@ if [ "$arch" == "unknown" ]; then
 fi
 
 if [ "$arch" != "x86_64" ]; then
-  echo "Arquitetura não suportada por enquanto: $arch"
-  exit 1
+    echo "Arquitetura não suportada por enquanto: $arch"
+    exit 1
 fi
-
 
 sudo sed -i '/alpha-painel/d' /etc/autostart
 
 pid=$(pgrep alpha-painel)
 if [ -n "$pid" ]; then
-  kill "$pid"
-  echo "O processo alpha-painel com PID $pid foi encerrado."
+    kill "$pid"
+    echo "O processo alpha-painel com PID $pid foi encerrado."
 fi
 
 pkill alpha-painel
@@ -100,7 +99,7 @@ echo
 
 sleep 5
 
-versao_ubuntu=$(lsb_release -r -s);
+versao_ubuntu=$(lsb_release -r -s)
 echo
 os_info=$(grep -o 'ID=\w*' /etc/os-release | cut -d'=' -f2 | tr -d '[:space:]')
 echo "Escolha a versão do servidor mais proxima da sua versão"
@@ -133,26 +132,28 @@ else
     exit 1
 fi
 
-
 protocolo=""
 if [ -e "/etc/painel-certificado.p12" ]; then
-  protocolo="--protocolo=https"
-  echo "O servidor será iniciado usando HTTPS."
+    protocolo="--protocolo=https"
+    echo "O servidor será iniciado usando HTTPS."
 else
-  echo "O servidor será iniciado usando HTTP."
+    echo "O servidor será iniciado usando HTTP."
 fi
 
 sleep 5
 
+if ! dpkg-query -W -f='${Status}' screen 2>/dev/null | grep -q "ok installed"; then
+    sudo apt install screen -y >/dev/null 2>&1
+fi
 sudo sed -i '/alpha-painel/d' /etc/autostart
-echo "(netstat -tlpn | grep -w 8081 > /dev/null && pgrep -x 'alpha-painel' > /dev/null) || /usr/bin/alpha-painel $protocolo &" | sudo tee -a /etc/autostart
+echo "(netstat -tlpn | grep -w 8081 > /dev/null) || screen -dmS alpha-painel /usr/bin/alpha-painel $protocolo" | sudo tee -a /etc/autostart
 
 bash /etc/autostart
 
 echo
-echo "Iniciando servidor, aguarde...";
+echo "Iniciando servidor, aguarde..."
 sleep 15
-if (netstat -tlpn | grep -w 8081 >/dev/null && pgrep -x 'alpha-painel' >/dev/null); then
+if (netstat -tlpn | grep -w 8081 >/dev/null); then
     echo
     echo
     echo
