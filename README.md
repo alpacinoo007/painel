@@ -11,9 +11,9 @@
 
 ## Segurança:
 
-- Autenticação stateless via token JWT
-- Uso do BCrypt na senha do servidor
-- Servidor instalado na VPS, tornando desnecessário o uso de credenciais SSH e aumentando a segurança
+- Autenticação stateless via token JWT.
+- Uso do BCrypt na senha do servidor.
+- Servidor instalado na VPS, tornando desnecessário o uso de credenciais SSH (Cliente SSH2) e aumentando a segurança.
 
 ---
 
@@ -31,6 +31,11 @@
 | Revenda                      |   ❌    |
 
 ---
+
+## Compatibilidade:
+
+- Ubuntu 18 a 22
+- Debian 11
 
 ## Tecnologias Usadas:
 
