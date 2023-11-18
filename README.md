@@ -3,17 +3,17 @@
 ## API que permite o funcionamento do [Alpha Painel](https://alphapainel.pages.dev/)
 ---
 
-## Instala��o:
+## Instalação:
 
-- A Instala��o � feita no site do painel, [clique aqui](https://alphapainel.pages.dev/)
+- A Instalação é feita no site do painel, [clique aqui](https://alphapainel.pages.dev/)
 
 ---
 
-## Seguran�a:
+## Segurança:
 
-- Autentica��o stateless via token JWT
+- Autenticação stateless via token JWT
 - Uso do BCrypt na senha do servidor
-- Servidor instalado na VPS, tornando desnecess�rio o uso de credenciais SSH e aumentando a seguran�a
+- Servidor instalado na VPS, tornando desnecessário o uso de credenciais SSH e aumentando a segurança
 
 ---
 
@@ -21,14 +21,14 @@
 
 | Recurso                      | Suporte |
 |------------------------------|  -----  |
-| Gerenciar Contas SSH         |   ??    |
-| Informa��es do servidor      |   ??    |
-| Abrir Portas                 |   ??    |
-| Gerenciar modos de conex�o   |   ??    |
-| Ativar Bots SSH              |   ??    |
-| Testar velocidade da conex�o |   ??    |
-| Ativar Check User            |   ??    |
-| Revenda                      |   ?    |
+| Gerenciar Contas SSH         |   ✔️    |
+| Informações do servidor      |   ✔️    |
+| Abrir Portas                 |   ✔️    |
+| Gerenciar modos de conexão   |   ✔️    |
+| Ativar Bots SSH              |   ✔️    |
+| Testar velocidade da conexão |   ✔️    |
+| Ativar Check User            |   ✔️    |
+| Revenda                      |   ❌    |
 
 ---
 
