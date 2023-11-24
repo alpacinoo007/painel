@@ -99,6 +99,12 @@ echo
 
 sleep 5
 
+echo "Baixando servidor..."
+echo "Sistemas compativeis: Ubuntu 18 a 22, Debian 11"
+echo
+echo "Em outros sistemas, algumas funções podem não funcionar corretamente"
+sleep 4
+
 #versao_ubuntu=$(lsb_release -r -s)
 #echo
 #os_info=$(grep -o 'ID=\w*' /etc/os-release | cut -d'=' -f2 | tr -d '[:space:]')
