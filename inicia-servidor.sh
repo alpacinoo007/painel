@@ -138,12 +138,12 @@ else
     exit 1
 fi
 
-protocolo=""
+protocolo="--protocolo=https"
 if [ -e "/etc/painel-certificado.p12" ]; then
-    protocolo="--protocolo=https"
     echo "O servidor será iniciado usando HTTPS."
 else
-    echo "O servidor será iniciado usando HTTP."
+    echo "Erro: É necessário gerar um certificado HTTPS!"
+    exit 1
 fi
 
 sleep 5
